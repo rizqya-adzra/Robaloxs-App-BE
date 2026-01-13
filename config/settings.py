@@ -25,7 +25,9 @@ INSTALLED_APPS = [
     'mptt',
     'import_export',
     
-    'apps.users'
+    'apps.users',
+    'apps.roblox_cores',
+    'apps.catalogues'
 ]
 
 MIDDLEWARE = [

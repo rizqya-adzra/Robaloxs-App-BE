@@ -12,6 +12,7 @@ class TimeStampedModel(models.Model):
 class RobloxServer(TimeStampedModel):
     server_id = models.BigIntegerField(unique=True, help_text="ID Server/Game dari Roblox")
     name = models.CharField(max_length=255)
+    image_url = models.ImageField(upload_to='assets/images/roblox_server/', null=True, blank=True) 
 
     class Meta:
         db_table = 'roblox_servers'

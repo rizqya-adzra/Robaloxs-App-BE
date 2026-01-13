@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from apps.roblox_cores.models import RobloxServer
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -63,7 +64,7 @@ class RobloxRobux(RobloxProduct):
 # 4. Tabel: roblox_items
 class RobloxItem(RobloxProduct):
     server = models.ForeignKey(
-        'apps.roblox_cores.models.RobloxServer', 
+        RobloxServer,
         on_delete=models.CASCADE,
         db_column='roblox_server_id'
     )

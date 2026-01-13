@@ -23,8 +23,8 @@ class RegisterView(APIView):
             return Response({
                 "message": "Registrasi berhasil",
                 "data": {
-                "email": user.email,
-                "token": token.key
+                    "email": user.email,
+                    "token": token.key
             }}, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -53,7 +53,7 @@ class LoginView(APIView):
 
 # 3. LOGOUT VIEW
 class LogoutView(APIView):
-    uthentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
