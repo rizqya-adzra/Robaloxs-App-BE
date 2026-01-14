@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(('apps.users.urls', 'users-api'))),
     path('api/', include(('apps.roblox_cores.urls', 'roblox-cores-api'))),
+    path('api/', include(('apps.catalogues.urls', 'catalogues-api'))),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

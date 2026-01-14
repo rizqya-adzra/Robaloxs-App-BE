@@ -72,7 +72,7 @@ class RobloxItem(RobloxProduct):
     roblox_item_id_external = models.BigIntegerField(help_text="ID Item dari API Roblox")
     
     description = models.TextField(blank=True, null=True) 
-    image_url = models.URLField(max_length=500, blank=True, null=True) 
+    image_url = models.ImageField(upload_to='assets/images/roblox_items/', null=True, blank=True)
 
     class Meta:
         db_table = 'roblox_items'
