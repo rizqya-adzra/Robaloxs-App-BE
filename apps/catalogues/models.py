@@ -38,6 +38,7 @@ class RobloxProduct(TimeStampedModel):
 
     class Meta:
         db_table = 'roblox_products'
+        verbose_name_plural = 'Products'
 
     def __str__(self):
         return f"{self.name} - {self.get_product_type_display()}"
@@ -55,7 +56,7 @@ class RobloxRobux(RobloxProduct):
 
     class Meta:
         db_table = 'roblox_robuxs'
-        verbose_name_plural = 'Robux Packages'
+        verbose_name_plural = 'Robux'
 
     def __str__(self):
         return f"{self.robux_amount} Robux ({self.name})"
@@ -76,6 +77,7 @@ class RobloxItem(RobloxProduct):
 
     class Meta:
         db_table = 'roblox_items'
+        verbose_name_plural = 'Items'
 
     def __str__(self):
         return self.name

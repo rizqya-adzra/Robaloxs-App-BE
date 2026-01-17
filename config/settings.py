@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     
     'apps.users',
     'apps.roblox_cores',
-    'apps.catalogues'
+    'apps.catalogues',
+    'apps.transactions',
 ]
 
 MIDDLEWARE = [

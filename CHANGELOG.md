@@ -31,3 +31,10 @@
 - Added get, post, put, and delete in apps.catalogues.views
 - Added apps.catalogues.admin for Django Admin
 - Minor changes in apps.catalogues.models 
+
+### V1.0.5
+- Added serializers.py in apps.transactions.serializers 
+- Added urls.py in apps.transactions.urls
+- Added get, post, put, and delete in apps.transactions.views
+- Added apps.transactions.admin for Django Admin
+- Minor changes in apps.transactions.models 
