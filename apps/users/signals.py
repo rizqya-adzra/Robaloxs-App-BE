@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import User, UserProfile, UserPrivateData
+from apps.users.models import User, UserProfile, UserPrivateData
 
 @receiver(post_save, sender=User)
 def create_user_related_tables(sender, instance, created, **kwargs):

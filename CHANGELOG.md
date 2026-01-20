@@ -38,3 +38,7 @@
 - Added get, post, put, and delete in apps.transactions.views
 - Added apps.transactions.admin for Django Admin
 - Minor changes in apps.transactions.models 
+
+### V1.0.6
+- changed the dir from views.py to folder that contains authentications.py & profiles.py
+- fixed apps.users.views & apps.users.views by using generic.views & Nested serializers

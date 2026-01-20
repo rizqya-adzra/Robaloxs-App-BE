@@ -9,6 +9,8 @@ The all in one platform for expanding your Robux with affordable price! in here 
 - v1.0.2 at 12th Jan 2026
 - v1.0.3 at 13th Jan 2026
 - v1.0.4 at 14th Jan 2026
+- v1.0.5 at 15th Jan 2026
+- v1.0.6 at 20th Jan 2026
 
 ## Features
 - Django REST API
