@@ -42,3 +42,10 @@
 ### V1.0.6
 - changed the dir from views.py to folder that contains authentications.py & profiles.py
 - fixed apps.users.views & apps.users.views by using generic.views & Nested serializers
+
+### V1.0.7
+- changed endpoint in apps.users.urls
+
+### V1.0.8
+- added utils.response for JSON response structure
+- fixed JSON response structure in apps.users.views 

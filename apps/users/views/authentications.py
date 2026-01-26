@@ -2,6 +2,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
+from django.core.exceptions import ObjectDoesNotExist
+from utils.response import response_success, response_error 
 
 from apps.users.serializers import RegisterSerializer, LoginSerializer
 
@@ -11,17 +13,21 @@ class RegisterView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        
         if serializer.is_valid():
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({
-                "message": "Registrasi berhasil",
-                "data": {
+            return response_success(
+                message="Login berhasil",
+                data={
                     "email": user.email,
                     "token": token.key
                 }
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            )
+        return response_error(
+            message="Login gagal",
+            errors=serializer.errors
+        )
 
 
 class LoginView(generics.GenericAPIView):
@@ -33,15 +39,17 @@ class LoginView(generics.GenericAPIView):
         if serializer.is_valid():
             user = serializer.validated_data 
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({
-                "message": "Login berhasil",
-                "data": {
+            return response_success(
+                message="Login berhasil",
+                data={
                     "email": user.email,
-                    "token": token.key,
-                    "is_staff": user.is_staff
+                    "token": token.key
                 }
-            }, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            )
+        return response_error(
+            message="Login gagal",
+            errors=serializer.errors
+        )
 
 
 class LogoutView(generics.GenericAPIView):
@@ -50,7 +58,22 @@ class LogoutView(generics.GenericAPIView):
 
     def post(self, request):
         try:
-            request.user.auth_token.delete()
-            return Response({"message": "Logout berhasil"}, status=status.HTTP_200_OK)
-        except:
-            return Response({"message": "Gagal logout"}, status=status.HTTP_400_BAD_REQUEST)
+            if hasattr(request.user, 'auth_token'):
+                request.user.auth_token.delete()
+            
+            return response_success(
+                message="Logout berhasil"
+            )
+
+        except (AttributeError, ObjectDoesNotExist):
+            return response_error(
+                message="Gagal logout. Token tidak ditemukan atau sudah kadaluarsa.",
+                errors={"token": "Token invalid"}
+            )
+        
+        except Exception as e:
+            return response_error(
+                message="Terjadi kesalahan sistem.",
+                errors=str(e), 
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
