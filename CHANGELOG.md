@@ -49,3 +49,7 @@
 ### V1.0.8
 - added utils.response for JSON response structure
 - fixed JSON response structure in apps.users.views 
+
+### V1.0.9
+- seperated the serializers and views classes to be related to functions that it serves  
+- fixed JSON response structure in apps.transaction.views and apps.transaction.serializers 
