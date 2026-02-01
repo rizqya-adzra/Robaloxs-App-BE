@@ -42,6 +42,7 @@ class LoginView(generics.GenericAPIView):
             return response_success(
                 message="Login berhasil",
                 data={
+                    "id": user.id,
                     "email": user.email,
                     "token": token.key
                 }

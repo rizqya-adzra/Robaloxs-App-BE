@@ -110,6 +110,8 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
     ],
+    
+    'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler',
 }
 
 LANGUAGE_CODE = 'en-us'

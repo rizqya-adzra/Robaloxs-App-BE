@@ -7,6 +7,7 @@ class RobloxServerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RobloxAccountSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = RobloxAccount
         fields = '__all__'

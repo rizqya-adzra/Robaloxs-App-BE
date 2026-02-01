@@ -53,3 +53,8 @@
 ### V1.0.9
 - seperated the serializers and views classes to be related to functions that it serves  
 - fixed JSON response structure in apps.transaction.views and apps.transaction.serializers 
+
+### V1.0.10
+- refactored views code in roblox_cores app
+- fixed JSON response structure in apps.roblox_cores.views and apps.roblox_cores.serializers 
+- added exeptions to utils.exeptions
