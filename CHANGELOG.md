@@ -58,3 +58,6 @@
 - refactored views code in roblox_cores app
 - fixed JSON response structure in apps.roblox_cores.views and apps.roblox_cores.serializers 
 - added exeptions to utils.exeptions
+
+### V1.0.11
+- refactored views & serializers code in catalogues app

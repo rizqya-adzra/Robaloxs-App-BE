@@ -1,178 +1,125 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import generics, permissions, status
+from apps.catalogues.models import RobuxCategory, RobloxItem, RobloxProduct, RobloxRobux
+from .serializers import (
+    RobloxItemSerializer, 
+    RobloxRobuxSerializer, 
+    RobloxProductSerializer, 
+    RobuxCategorySerializer
+)
+from utils.response import response_success 
 
-from .models import RobuxCategory, RobloxItem, RobloxProduct, RobloxRobux, RobloxServer
-from .serializers import RobloxItemSerializer, RobloxRobuxSerializer, RobloxProductSerializer, RobloxServerSerializer, RobuxCategorySerializer
+class RobloxCategoryList(generics.ListCreateAPIView):
+    queryset = RobuxCategory.objects.all()
+    serializer_class = RobuxCategorySerializer
+    permission_classes = [permissions.AllowAny]
 
-class RobloxCategoryListView(APIView):
-    permission_classes = [AllowAny]
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return response_success("Daftar kategori robux", response.data)
 
-    def get(self, request):
-        categories = RobuxCategory.objects.all()
-        serializer = RobuxCategorySerializer(categories, many=True)
-        return Response({
-            "message": "Daftar kategori robux",
-            "data": serializer.data
-        })
-        
-    def post(self, request):
-        serializer = RobuxCategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return response_success("Kategori berhasil dibuat", response.data, status.HTTP_201_CREATED)
 
-class RobloxCategoryDetailView(APIView):
-    permission_classes = [AllowAny]
-    
-    def get_object(self, pk):
-        return get_object_or_404(RobuxCategory, pk=pk)
+class RobloxCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RobuxCategory.objects.all()
+    serializer_class = RobuxCategorySerializer
+    permission_classes = [permissions.AllowAny]
 
-    def get(self, request, pk):
-        categories = self.get_object(pk)
-        serializer = RobuxCategorySerializer(categories)
-        return Response({
-            "message": "Detail kategori ditemukan",
-            "data": serializer.data
-        })
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+        return response_success("Detail kategori ditemukan", response.data)
 
-    def put(self, request, pk):
-        categories = self.get_object(pk)
-        serializer = RobuxCategorySerializer(categories, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return response_success("Kategori berhasil diupdate", response.data)
 
-    def delete(self, request, pk):
-        categories = self.get_object(pk)
-        categories.delete()
-        return Response({
-            "message": "Kategori berhasil dihapus"
-        },status=status.HTTP_204_NO_CONTENT)
+    def destroy(self, request, *args, **kwargs):
+        super().destroy(request, *args, **kwargs)
+        return response_success("Kategori berhasil dihapus", status_code=status.HTTP_204_NO_CONTENT)
 
-class RobloxRobuxListView(APIView):
-    permission_classes = [AllowAny]
 
-    def get(self, request):
-        robux = RobloxRobux.objects.all()
-        serializer = RobloxRobuxSerializer(robux, many=True)
-        return Response({
-            "message": "Daftar robux Roblox",
-            "data": serializer.data
-        })
-        
-    def post(self, request):
-        serializer = RobloxRobuxSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class RobloxRobuxList(generics.ListCreateAPIView):
+    queryset = RobloxRobux.objects.all()
+    serializer_class = RobloxRobuxSerializer
+    permission_classes = [permissions.AllowAny]
 
-class RobloxRobuxDetailView(APIView):
-    permission_classes = [AllowAny]
-    
-    def get_object(self, pk):
-        return get_object_or_404(RobloxRobux, pk=pk)
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return response_success("Daftar robux Roblox", response.data)
 
-    def get(self, request, pk):
-        robux = self.get_object(pk)
-        serializer = RobloxRobuxSerializer(robux)
-        return Response({
-            "message": "Detail robux ditemukan",
-            "data": serializer.data
-        })
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return response_success("Paket Robux berhasil dibuat", response.data, status.HTTP_201_CREATED)
 
-    def put(self, request, pk):
-        robux = self.get_object(pk)
-        serializer = RobloxRobuxSerializer(robux, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self, request, pk):
-        robux = self.get_object(pk)
-        robux.delete()
-        return Response({
-            "message": "Robux berhasil dihapus"
-        },status=status.HTTP_204_NO_CONTENT)
+class RobloxRobuxDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RobloxRobux.objects.all()
+    serializer_class = RobloxRobuxSerializer
+    permission_classes = [permissions.AllowAny]
 
-class RobloxItemListView(APIView):
-    permission_classes = [AllowAny]
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+        return response_success("Detail robux ditemukan", response.data)
 
-    def get(self, request):
-        items = RobloxItem.objects.all()
-        serializer = RobloxItemSerializer(items, many=True)
-        return Response({
-            "message": "Daftar item Roblox",
-            "data": serializer.data
-        })
-        
-    def post(self, request):
-        serializer = RobloxItemSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return response_success("Paket Robux berhasil diupdate", response.data)
 
-class RobloxItemDetailView(APIView):
-    permission_classes = [AllowAny]
-    
-    def get_object(self, pk):
-        return get_object_or_404(RobloxItem, pk=pk)
+    def destroy(self, request, *args, **kwargs):
+        super().destroy(request, *args, **kwargs)
+        return response_success("Paket Robux berhasil dihapus", status_code=status.HTTP_204_NO_CONTENT)
 
-    def get(self, request, pk):
-        item = self.get_object(pk)
-        serializer = RobloxItemSerializer(item)
-        return Response({
-            "message": "Detail item ditemukan",
-            "data": serializer.data
-        })
 
-    def put(self, request, pk):
-        item = self.get_object(pk)
-        serializer = RobloxItemSerializer(item, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self, request, pk):
-        item = self.get_object(pk)
-        item.delete()
-        return Response({
-            "message": "Item berhasil dihapus"
-        },status=status.HTTP_204_NO_CONTENT)
-        
-class RobloxProductListView(APIView):
-    permission_classes = [AllowAny]
+class RobloxItemList(generics.ListCreateAPIView):
+    queryset = RobloxItem.objects.all()
+    serializer_class = RobloxItemSerializer
+    permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
-        products = RobloxProduct.objects.all()
-        serializer = RobloxProductSerializer(products, many=True)
-        return Response({
-            "message": "Daftar produk Roblox",
-            "data": serializer.data
-        })
-    
-class RobloxProductDetailView(APIView):
-    permission_classes = [AllowAny]
-    
-    def get_object(self, pk):
-        return get_object_or_404(RobloxProduct, pk=pk)
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return response_success("Daftar item Roblox", response.data)
 
-    def get(self, request, pk):
-        product = self.get_object(pk)
-        serializer = RobloxProductSerializer(product)
-        return Response({
-            "message": "Detail produk ditemukan",
-            "data": serializer.data
-        })
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return response_success("Item berhasil dibuat", response.data, status.HTTP_201_CREATED)
+
+
+class RobloxItemDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = RobloxItem.objects.all()
+    serializer_class = RobloxItemSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+        return response_success("Detail item ditemukan", response.data)
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return response_success("Item berhasil diupdate", response.data)
+
+    def destroy(self, request, *args, **kwargs):
+        super().destroy(request, *args, **kwargs)
+        return response_success("Item berhasil dihapus", status_code=status.HTTP_204_NO_CONTENT)
+
+
+class RobloxProductList(generics.ListAPIView):
+    serializer_class = RobloxProductSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return RobloxProduct.objects.select_related('robloxrobux', 'robloxitem').all()
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return response_success("Daftar semua produk (Item & Robux)", response.data)
+
+class RobloxProductDetail(generics.RetrieveAPIView):
+    serializer_class = RobloxProductSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return RobloxProduct.objects.select_related('robloxrobux', 'robloxitem').all()
+
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+        return response_success("Detail produk ditemukan", response.data)

@@ -8,9 +8,9 @@ class RobuxCategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
 
-class RobuxCategorySerializer(serializers.ModelSerializer):
+class RobloxServerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RobuxCategory
+        model = RobloxServer
         fields = ['id', 'name', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
 
@@ -30,14 +30,9 @@ class RobloxRobuxSerializer(serializers.ModelSerializer):
         }
         return response
 
-class RobloxServerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RobloxServer
-        fields = ['id', 'name', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at']
-
 class RobloxItemSerializer(serializers.ModelSerializer):
     server = serializers.PrimaryKeyRelatedField(queryset=RobloxServer.objects.all())
+
     class Meta:
         model = RobloxItem
         fields = ['id', 'product_type', 'roblox_item_id_external', 'name', 'price', 'server', 'description', 'image_url', 'created_at']
@@ -50,7 +45,7 @@ class RobloxItemSerializer(serializers.ModelSerializer):
             "name": instance.server.name
         }
         return response
-
+    
 class RobloxProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = RobloxProduct
@@ -59,13 +54,14 @@ class RobloxProductSerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):
         response = super().to_representation(instance)
+        
         if instance.product_type == RobloxProduct.ProductType.ROBUX:
             try:
                 robux_instance = instance.robloxrobux 
                 custom_data = RobloxRobuxSerializer(robux_instance).data
                 response.update(custom_data) 
             except RobloxRobux.DoesNotExist:
-                response['error'] = "Data Robux detail hilang"
+                response['error'] = "Detail data Robux hilang"
 
         elif instance.product_type == RobloxProduct.ProductType.ITEM:
             try:
@@ -73,5 +69,6 @@ class RobloxProductSerializer(serializers.ModelSerializer):
                 custom_data = RobloxItemSerializer(item_instance).data
                 response.update(custom_data)
             except RobloxItem.DoesNotExist:
-                response['error'] = "Data Item detail hilang"
+                response['error'] = "Detail data Item hilang"
+                
         return response
