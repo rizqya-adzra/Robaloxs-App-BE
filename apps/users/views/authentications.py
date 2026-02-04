@@ -18,14 +18,14 @@ class RegisterView(generics.CreateAPIView):
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
             return response_success(
-                message="Login berhasil",
+                message="Registrasi berhasil",
                 data={
                     "email": user.email,
                     "token": token.key
                 }
             )
         return response_error(
-            message="Login gagal",
+            message="Registrasi gagal",
             errors=serializer.errors
         )
 

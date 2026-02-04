@@ -1,12 +1,36 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+from rest_framework.validators import UniqueValidator
 from apps.users.models import User, UserProfile, UserPrivateData, Badge
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=8)
+    password = serializers.CharField(
+        write_only=True,
+        error_messages={
+            'required': 'Password wajib diisi.',
+            'blank': 'Password tidak boleh kosong.',
+            'min_length': 'Password minimal 6 karakter.'
+        }
+    )
     class Meta:
         model = User
         fields = ['email', 'password']
+        extra_kwargs = {
+            'email': {
+                'validators': [
+                    UniqueValidator(
+                        queryset=User.objects.all(),
+                        message='Email sudah terdaftar, silakan login.'
+                    )
+                ],
+                'error_messages': {
+                    'required': 'Email wajib diisi.',
+                    'blank': 'Email tidak boleh kosong.',
+                    'invalid': 'Format email salah.',
+                    
+                }
+            },
+        }
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -16,8 +40,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(
+        error_messages={
+            'required': 'Email wajib diisi.',
+            'blank': 'Email wajib diisi.',
+            'invalid': 'Email tidak valid.'
+        }
+    )
+    password = serializers.CharField(
+        write_only=True,
+        error_messages={
+            'required': 'Password wajib diisi.',
+            'blank': 'Password wajib diisi.'
+        }
+    )
 
     def validate(self, data):
         user = authenticate(**data)

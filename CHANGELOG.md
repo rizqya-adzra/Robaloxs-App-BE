@@ -61,3 +61,6 @@
 
 ### V1.0.11
 - refactored views & serializers code in catalogues app
+
+### V1.0.12
+- added UniqueValidator and kwargs to apps.users.serializers
